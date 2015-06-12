@@ -1,5 +1,5 @@
 # slackbot-workout
-A fun hack that gets Slackbot to force your teammates to work out!
+A fun hack that gets Slackbot to force your teammates to work out! This is NerdWallet's fork with our own custom exercises!
 
 <img src = "https://ctrlla-blog.s3.amazonaws.com/2015/Jun/Screen_Shot_2015_06_10_at_5_57_55_PM-1433984292189.png" width = 500>
 
@@ -8,7 +8,7 @@ A fun hack that gets Slackbot to force your teammates to work out!
 
 1. Clone the repo and navigate into the directory in your terminal.
 
-    `$ git clone git@github.com:brandonshin/slackbot-workout.git`
+    `$ git clone git@github.com:ahollenbach/slackbot-workout.git`
 
 2. Go to your slack home page https://{yourgroup}.slack.com/home & click on **Integrations** on the left sidebar.
 
