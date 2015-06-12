@@ -8,6 +8,11 @@ import os
 USERTOKENSTRING =  os.environ['SLACK_USER_TOKEN_STRING']
 URLTOKENSTRING =  os.environ['URL_TOKEN_STRING']
 
+
+MIN_COUNTDOWN = 5       # in minutes
+MAX_COUNTDOWN = 30      # in minutes
+
+
 def extractSlackUsers(token):
     # Set token parameter of Slack API call
     tokenString = token
@@ -38,7 +43,7 @@ def selectExerciseAndStartTime():
     exerciseAnnouncements = ["PUSHUPS", "PUSHUPS", "PLANK", "SITUPS", "WALLSIT"]
 
     # Random Number generator for Reps/Seconds and Exercise
-    nextTimeInterval = random.randrange(300, 1800)
+    nextTimeInterval = random.randrange(MIN_COUNTDOWN * 60, MAX_COUNTDOWN * 60)
     exerciseIndex = random.randrange(0, 5)
 
     # Announcement String of next lottery time
