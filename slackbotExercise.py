@@ -3,9 +3,10 @@ import time
 import requests
 import json
 import csv
+import os
 
-USERTOKENSTRING =  # YOUR (SLACKBOT API) USER AUTH TOKEN
-URLTOKENSTRING =  # SLACKBOT REMOTE CONTROL URL TOKEN
+USERTOKENSTRING =  os.environ['SLACK_USER_TOKEN_STRING']
+URLTOKENSTRING =  os.environ['URL_TOKEN_STRING']
 
 def extractSlackUsers(token):
     # Set token parameter of Slack API call
