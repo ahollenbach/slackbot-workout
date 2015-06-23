@@ -1,5 +1,8 @@
 config.json
 *.pyc
 
-log*.csv
 user_cache.save
+log*.csv
+breakdown*
+
+*_DEBUG

@@ -25,6 +25,7 @@ class Bot:
         self.setConfiguration()
 
         self.csv_filename = "log" + time.strftime("%Y%m%d-%H%M") + ".csv"
+        self.breakdown_filename = "breakdown" + time.strftime("%Y%m%d-%H%M") + ".data"
         self.first_run = True
 
         # local cache of usernames
@@ -261,6 +262,32 @@ def saveUsers(bot):
     with open('user_cache.save','wb') as f:
         pickle.dump(bot.user_cache,f)
 
+'''
+Made specifically to store status while running, in the event of system crash
+'''
+def printBreakdown(bot):
+    s = "```\n"
+    s += "Username".ljust(15)
+    for exercise in bot.exercises:
+        s += exercise["name"] + "  "
+    s += "\n---------------------------------------------------------------\n"
+
+    for user_id in bot.user_cache:
+        user = bot.user_cache[user_id]
+        s += user.username.ljust(15)
+        for exercise in bot.exercises:
+            if exercise["id"] in user.exercises:
+                s += str(user.exercises[exercise["id"]]).ljust(len(exercise["name"]) + 2)
+            else:
+                s += str(0).ljust(len(exercise["name"]) + 2)
+        s += "\n"
+
+    s += "```"
+
+    filename = bot.breakdown_filename + "_DEBUG" if bot.debug else bot.breakdown_filename
+    with open(filename, 'w') as f:
+        f.write(s)
+
 
 def main():
     bot = Bot()
@@ -275,6 +302,9 @@ def main():
 
             # Assign the exercise to someone
             assignExercise(bot, exercise)
+
+            # Pseudo-save state after each (todo save the whole thing)
+            printBreakdown(bot)
     except KeyboardInterrupt:
         saveUsers(bot)
 
