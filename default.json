@@ -51,6 +51,13 @@
       "minReps": 20,
       "maxReps": 30,
       "units": "reps"
+    },
+    {
+      "id": 5,
+      "name": "mountain climbers",
+      "minReps": 20,
+      "maxReps": 30,
+      "units": "reps"
     }
   ]
 }
