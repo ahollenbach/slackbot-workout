@@ -16,48 +16,57 @@
     "groupCalloutChance": 0.05
   },
 
-  "exercises": [
-    {
+  "exercises": {
+    "0": {
       "id": 0,
       "name": "pushups",
       "minReps": 15,
       "maxReps": 20,
       "units": "reps"
     },
-    {
+    "1": {
       "id": 1,
       "name": "planks",
       "minReps": 40,
       "maxReps": 60,
       "units": "seconds"
     },
-    {
+    "2": {
       "id": 2,
       "name": "wall sit",
       "minReps": 40,
       "maxReps": 50,
       "units": "seconds"
     },
-    {
+    "3": {
       "id": 3,
       "name": "chair dips",
       "minReps": 15,
       "maxReps": 30,
       "units": "reps"
     },
-    {
+    "4": {
       "id": 4,
       "name": "calf raises",
       "minReps": 20,
       "maxReps": 30,
       "units": "reps"
     },
-    {
+    "5": {
       "id": 5,
       "name": "mountain climbers",
       "minReps": 20,
       "maxReps": 30,
       "units": "reps"
     }
-  ]
+  },
+
+  "timeRestrictions": {
+    "activeHours": [
+      ["10:30", "6:30"]
+    ],
+    "inactiveHours": [
+      ["12:00", "12:30"]
+    ]
+  }
 }

@@ -51,10 +51,19 @@ class Bot:
     Runs after every callout so that settings can be changed realtime
     '''
     def setConfiguration(self):
-        # Read variables fromt the configuration file
-        with open('config.json') as f:
-            settings = json.load(f)
+        # Read defaults first
+        with open('default.json') as df:
+            settings = json.load(df)
 
+            # Read additional variables from the configuration file
+            with open('config.json') as cf:
+                config_settings = json.load(cf)
+
+                settings = overwrite_json(settings, config_settings)
+
+
+            # At this point, any defaults that have been set in the config files
+            # Will be overwritten
             self.team_domain = settings["teamDomain"]
             self.channel_name = settings["channelName"]
             self.min_countdown = settings["callouts"]["timeBetween"]["minTime"]
@@ -67,7 +76,25 @@ class Bot:
 
             self.debug = settings["debug"]
 
+        self.debug = True
+
+        # Set post url based on settings
         self.post_URL = "https://" + self.team_domain + ".slack.com/services/hooks/slackbot?token=" + URL_TOKEN_STRING + "&channel=" + HASH + self.channel_name
+################################################################################
+'''
+Overwrites a default json with a new json. If the value is a dict,
+it recursively expands it. If it is a list or simple value, it will be
+overwritten if the key exists in both jsons.
+'''
+def overwrite_json(default_json, json):
+    if isinstance(default_json, dict):
+        for k, v in default_json.items():
+            if k in json:
+                if isinstance(v, dict):
+                    default_json[k] = overwrite_json(default_json[k], json[k])
+                else:
+                    default_json[k] = json[k]
+        return default_json
 
 
 ################################################################################
@@ -172,8 +199,9 @@ def selectExerciseAndStartTime(bot):
 Selects the next exercise
 '''
 def selectExercise(bot):
-    idx = random.randrange(0, len(bot.exercises))
-    return bot.exercises[idx]
+    keys = bot.exercises.keys()
+    idx = random.randrange(0, len(keys))
+    return bot.exercises[keys[idx]]
 
 
 '''
@@ -235,16 +263,18 @@ def saveUsers(bot):
     s = "```\n"
     #s += "Username\tAssigned\tComplete\tPercent
     s += "Username".ljust(15)
-    for exercise in bot.exercises:
+    for exercise_id in bot.exercises:
+        exercise = bot.exercises[exercise_id]
         s += exercise["name"] + "  "
     s += "\n---------------------------------------------------------------\n"
 
     for user_id in bot.user_cache:
         user = bot.user_cache[user_id]
         s += user.username.ljust(15)
-        for exercise in bot.exercises:
-            if exercise["id"] in user.exercises:
-                s += str(user.exercises[exercise["id"]]).ljust(len(exercise["name"]) + 2)
+        for exercise_id in bot.exercises:
+            exercise = bot.exercises[exercise_id]
+            if exercise_id in user.exercises:
+                s += str(user.exercises[exercise_id]).ljust(len(exercise["name"]) + 2)
             else:
                 s += str(0).ljust(len(exercise["name"]) + 2)
         s += "\n"
@@ -268,16 +298,18 @@ Made specifically to store status while running, in the event of system crash
 def printBreakdown(bot):
     s = "```\n"
     s += "Username".ljust(15)
-    for exercise in bot.exercises:
+    for exercise_id in bot.exercises:
+        exercise = bot.exercises[exercise_id]
         s += exercise["name"] + "  "
     s += "\n---------------------------------------------------------------\n"
 
     for user_id in bot.user_cache:
         user = bot.user_cache[user_id]
         s += user.username.ljust(15)
-        for exercise in bot.exercises:
-            if exercise["id"] in user.exercises:
-                s += str(user.exercises[exercise["id"]]).ljust(len(exercise["name"]) + 2)
+        for exercise_id in bot.exercises:
+            exercise = bot.exercises[exercise_id]
+            if exercise_id in user.exercises:
+                s += str(user.exercises[exercise_id]).ljust(len(exercise["name"]) + 2)
             else:
                 s += str(0).ljust(len(exercise["name"]) + 2)
         s += "\n"
