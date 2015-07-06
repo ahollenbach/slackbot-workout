@@ -61,6 +61,9 @@ class Bot:
             self.num_people_per_callout = settings["callouts"]["numPeople"]
             self.sliding_window_size = settings["callouts"]["slidingWindowSize"]
             self.group_callout_chance = settings["callouts"]["groupCalloutChance"]
+            self.active_hours = settings["timeRestrictions"]["activeHours"]
+            self.active_hours = settings["timeRestrictions"]["inactiveHours"]
+
             self.exercises = settings["exercises"]
             self.debug = settings["debug"]
 
@@ -162,11 +165,13 @@ class Bot:
 
 
     '''
-    Selects the next exercise
+    Selects the next exercise. If it's disabled, recurse ;)
     '''
     def select_exercise(self):
         idx = random.randrange(0, len(self.exercises))
-        return self.exercises[idx]
+        if self.exercises[idx]["enabled"]:
+            return self.exercises[idx]
+        return self.select_exercise()
 
 
     '''
