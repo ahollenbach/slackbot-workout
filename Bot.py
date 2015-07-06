@@ -8,6 +8,7 @@ import pickle
 import os.path
 import time
 from datetime import datetime
+from dateutil import parser
 
 from User import User
 from SlackClient import SlackClient
@@ -23,6 +24,7 @@ class Bot:
         self.csv_filename = "log" + time.strftime("%Y%m%d-%H%M") + ".csv"
         self.breakdown_filename = "breakdown" + time.strftime("%Y%m%d-%H%M") + ".data"
         self.first_run = True
+        self.active = False
 
         # local cache of usernames
         # maps userIds to usernames
@@ -52,7 +54,7 @@ class Bot:
     Runs after every callout so that settings can be changed realtime
     '''
     def set_configuration(self):
-        # Read variables fromt the configuration file
+        # Read variables from the configuration file
         with open('config.json') as f:
             settings = json.load(f)
 
@@ -61,8 +63,11 @@ class Bot:
             self.num_people_per_callout = settings["callouts"]["numPeople"]
             self.sliding_window_size = settings["callouts"]["slidingWindowSize"]
             self.group_callout_chance = settings["callouts"]["groupCalloutChance"]
-            self.active_hours = settings["timeRestrictions"]["activeHours"]
-            self.active_hours = settings["timeRestrictions"]["inactiveHours"]
+            self.active_hours = settings["timeRestrictions"]["activeHours"][0]
+            self.inactive_hours = settings["timeRestrictions"]["inactiveHours"]
+
+            self.active_hours[0] = parser.parse(self.active_hours[0]).time()
+            self.active_hours[1] = parser.parse(self.active_hours[1]).time()
 
             self.exercises = settings["exercises"]
             self.debug = settings["debug"]
@@ -250,7 +255,8 @@ class Bot:
 
         s += "```"
 
-        self.slack_client.send_message(s, self.debug)
+        # Let's not send at the end so we can manually do it for now
+        #self.slack_client.send_message(s, self.debug)
 
         # write to file
         with open('user_cache.save','wb') as f:
