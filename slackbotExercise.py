@@ -24,11 +24,11 @@ def main():
             bot.set_configuration()
 
             # Get an exercise to do
-            now = datetime.datetime.now().time()
+            now = datetime.now().time()
             if now > bot.active_hours[0] and now < bot.active_hours[1]:
-                if not active:
-                    slack_client.send_message("Good morning everyone! Here we go!")
-                    active = True
+                if not bot.active:
+                    slack_client.send_message("Hey all! Better late than never! ;)", bot.debug)
+                    bot.active = True
                     
                 exercise = bot.select_exercise_and_start_time()
                 #sleep_time = bot.select_time()
@@ -37,9 +37,12 @@ def main():
 
                 # Assign the exercise to someone
                 bot.assign_exercise(exercise)
-            # else:
-            #     print now-bot.active_hours[0]
-            #     sleep(now-bot.active_hours[0])
+                # else:
+                #     print now-bot.active_hours[0]
+                #     sleep(now-bot.active_hours[0])
+            elif now > bot.active_hours[1] and bot.active:
+                bot.active = False
+                slack_client.send_message("That's all for today - great work everyone!", bot.debug)
 
             # Pseudo-save state after each (todo save the whole thing)
             bot.print_breakdown()

@@ -64,7 +64,7 @@ class Bot:
             self.sliding_window_size = settings["callouts"]["slidingWindowSize"]
             self.group_callout_chance = settings["callouts"]["groupCalloutChance"]
             self.active_hours = settings["timeRestrictions"]["activeHours"][0]
-            self.inactive_hours = settings["timeRestrictions"]["inactiveHours"]
+            # self.inactive_hours = settings["timeRestrictions"]["inactiveHours"]
 
             self.active_hours[0] = parser.parse(self.active_hours[0]).time()
             self.active_hours[1] = parser.parse(self.active_hours[1]).time()
