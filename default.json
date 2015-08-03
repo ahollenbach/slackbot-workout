@@ -16,9 +16,15 @@
     "groupCalloutChance": 0.05
   },
 
+  "phrases": {
+    "intro" : "Good morning!",
+    "outro" : "That's all for today - great work everyone!"
+  },
+
   "exercises": [
     {
       "id": 0,
+      "enabled": true,
       "name": "pushups",
       "minReps": 15,
       "maxReps": 20,
@@ -26,6 +32,7 @@
     },
     {
       "id": 1,
+      "enabled": true,
       "name": "planks",
       "minReps": 40,
       "maxReps": 60,
@@ -33,13 +40,15 @@
     },
     {
       "id": 2,
+      "enabled": true,
       "name": "wall sit",
-      "minReps": 40,
-      "maxReps": 50,
+      "minReps": 45,
+      "maxReps": 60,
       "units": "seconds"
     },
     {
       "id": 3,
+      "enabled": true,
       "name": "chair dips",
       "minReps": 15,
       "maxReps": 30,
@@ -47,6 +56,7 @@
     },
     {
       "id": 4,
+      "enabled": true,
       "name": "calf raises",
       "minReps": 20,
       "maxReps": 30,
@@ -54,10 +64,20 @@
     },
     {
       "id": 5,
+      "enabled": false,
       "name": "mountain climbers",
       "minReps": 20,
       "maxReps": 30,
       "units": "reps"
     }
-  ]
+  ],
+
+  "timeRestrictions": {
+    "activeHours": [
+      ["10:30", "6:30"]
+    ],
+    "blacklistHours": [
+      ["12:00", "12:30"]
+    ]
+  }
 }

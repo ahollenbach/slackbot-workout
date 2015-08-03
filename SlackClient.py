@@ -36,7 +36,7 @@ class SlackClient:
     def send_message(self, message, debug=False):
         if not debug:
             requests.post(self.message_url, data=message)
-        print message
+        print "[" + str(datetime.now()) + "] " + message
 
     '''
     Sends a request to the slack api using the method name supplied.

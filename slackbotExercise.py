@@ -24,13 +24,31 @@ def main():
             bot.set_configuration()
 
             # Get an exercise to do
-            exercise = bot.select_exercise_and_start_time()
-            #sleep_time = bot.select_time()
+            now = datetime.now().time()
+            if now > bot.active_hours[0] and now < bot.active_hours[1]:
+                # for inactive_timespan in bot.inactive_hours:
+                #     if inactive_timespan[0] < now and now < inactive_timespan[1]:
+                #         print "sleeping for " + str((inactive_timespan[1]-now)/1000)
+                #         sleep((inactive_timespan[1]-now)/1000) # TODO can't subtract
+                #         break
 
-            #wait(sleep_time)
+                if not bot.active:
+                    slack_client.send_message(bot.intro, bot.debug)
+                    bot.active = True
 
-            # Assign the exercise to someone
-            bot.assign_exercise(exercise)
+                exercise = bot.select_exercise_and_start_time()
+                #sleep_time = bot.select_time()
+
+                #wait(sleep_time)
+
+                # Assign the exercise to someone
+                bot.assign_exercise(exercise)
+                # else:
+                #     print now-bot.active_hours[0]
+                #     sleep(now-bot.active_hours[0])
+            elif now > bot.active_hours[1] and bot.active:
+                bot.active = False
+                slack_client.send_message(bot.outro, bot.debug)
 
             # Pseudo-save state after each (todo save the whole thing)
             bot.print_breakdown()
