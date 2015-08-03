@@ -5,6 +5,12 @@
 
   "debug": false,
 
+  "storage": {
+    "userDir": "./users",
+    "logDir": "./logs",
+    "format": "JSON"
+  },
+
   "callouts": {
     "timeBetween": {
       "minTime": 17,

@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import os.path
 
 class User:
     def __init__(self, user_id, slack_client):
@@ -78,3 +79,6 @@ class User:
 
     def has_done_exercise(self, exercise):
         return exercise["id"] in self.exercise_counts
+
+    def write_to_file(self, user_dir):
+        pass

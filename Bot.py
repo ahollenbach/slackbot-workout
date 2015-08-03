@@ -5,6 +5,7 @@ import json
 import csv
 from random import shuffle
 import pickle
+import os
 import os.path
 import time
 from datetime import datetime
@@ -35,8 +36,8 @@ class Bot:
 
 
     def load_user_cache(self):
-        if os.path.isfile('user_cache.save'):
-            with open('user_cache.save','rb') as f:
+        if os.path.isfile(os.path.join(self.user_dir, 'user_cache.save')):
+            with open(os.path.join(self.user_dir, 'user_cache.save'),'rb') as f:
                 self.user_cache = pickle.load(f)
 
                 # Update slack client
@@ -84,9 +85,16 @@ class Bot:
             self.intro = settings["phrases"]["intro"]
             self.outro = settings["phrases"]["outro"]
 
+            self.user_dir = settings["storage"]["userDir"]
+            if not os.path.isdir(self.user_dir):
+                os.makedirs(self.user_dir)
+            self.log_dir = settings["storage"]["logDir"]
+            if not os.path.isdir(self.log_dir):
+                os.makedirs(self.log_dir)
+            self.storage_format = settings["storage"]["format"]
+
             self.exercises = settings["exercises"]
             self.debug = settings["debug"]
-            self.debug = True
 
             self.slack_client.set_info(settings["teamDomain"], settings["channelName"], settings["channelId"])
 
@@ -258,7 +266,7 @@ class Bot:
 
     def log_exercise(self,username,exercise,reps,units):
         filename = self.csv_filename + "_DEBUG" if self.debug else self.csv_filename
-        with open(filename, 'a') as f:
+        with open(os.path.join(self.log_dir, filename), 'a') as f:
             writer = csv.writer(f)
 
             writer.writerow([str(datetime.now()),username,exercise,reps,units,self.debug])
@@ -289,9 +297,16 @@ class Bot:
         # Let's not send at the end so we can manually do it for now
         #self.slack_client.send_message(s, self.debug)
 
-        # write to file
-        with open('user_cache.save','wb') as f:
-            pickle.dump(self.user_cache,f)
+        if self.storage_format == "JSON":
+            print "Storing each user as a JSON file"
+            for user_id in self.user_cache:
+                self.user_cache[user_id].write_to_file(self.user_dir)
+
+
+        elif self.storage_format == "PICKLE":
+            # write to file
+            with open(os.path.join(self.user_dir, 'user_cache.save'),'wb') as f:
+                pickle.dump(self.user_cache,f)
 
     '''
     Made specifically to store status while running, in the event of system crash
@@ -316,5 +331,5 @@ class Bot:
         s += "```"
 
         filename = self.breakdown_filename + "_DEBUG" if self.debug else self.breakdown_filename
-        with open(filename, 'w') as f:
+        with open(os.path.join(self.user_dir, filename), 'w') as f:
             f.write(s)
