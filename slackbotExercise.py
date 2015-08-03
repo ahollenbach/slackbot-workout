@@ -11,11 +11,11 @@ from datetime import datetime
 
 from User import User
 from Bot import Bot
-from SlackClient import SlackClient
+from MySlackClient import MySlackClient
 
 
 def main():
-    slack_client = SlackClient()
+    slack_client = MySlackClient()
     bot = Bot(slack_client)
 
     try:

@@ -22,7 +22,7 @@ An API wrapper for the Slack API. All requests and messages should be sent
 through this wrapper. You *must* call `set_info(...)` before you can use
 this class.
 '''
-class SlackClient:
+class MySlackClient:
     def __init__(self):
         self.api_url = "https://slack.com/api"
 

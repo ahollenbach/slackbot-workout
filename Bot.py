@@ -12,7 +12,7 @@ from datetime import datetime
 from dateutil import parser
 
 from User import User
-from SlackClient import SlackClient
+from MySlackClient import MySlackClient
 
 '''
 The driving bot behind the workout program. Tracks
