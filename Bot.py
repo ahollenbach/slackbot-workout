@@ -54,10 +54,17 @@ class Bot:
     Runs after every callout so that settings can be changed realtime
     '''
     def set_configuration(self):
-        # Read variables from the configuration file
-        with open('config.json') as f:
-            settings = json.load(f)
+        # Read defaults first
+        with open('default.json') as df:
+            settings = json.load(df)
 
+            # Read additional variables from the configuration file
+            with open('config.json') as cf:
+                config_settings = json.load(cf)
+                settings = self.overwrite_json(settings, config_settings)
+
+            # At this point, any defaults that have been set in default.json
+            # will be overwritten
             self.min_countdown = settings["callouts"]["timeBetween"]["minTime"]
             self.max_countdown = settings["callouts"]["timeBetween"]["maxTime"]
             self.num_people_per_callout = settings["callouts"]["numPeople"]
@@ -79,8 +86,24 @@ class Bot:
 
             self.exercises = settings["exercises"]
             self.debug = settings["debug"]
+            self.debug = True
 
             self.slack_client.set_info(settings["teamDomain"], settings["channelName"], settings["channelId"])
+
+    '''
+    Overwrites a default json with a new json. If the value is a dict,
+    it recursively expands it. If it is a list or simple value, it will be
+    overwritten if the key exists in both jsons.
+    '''
+    def overwrite_json(self, default_json, json):
+        if isinstance(default_json, dict):
+            for k, v in default_json.items():
+                if k in json:
+                    if isinstance(v, dict):
+                        default_json[k] = self.overwrite_json(default_json[k], json[k])
+                    else:
+                        default_json[k] = json[k]
+            return default_json
 
 
     '''
