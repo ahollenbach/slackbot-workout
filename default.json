@@ -16,6 +16,11 @@
     "groupCalloutChance": 0.05
   },
 
+  "phrases": {
+    "intro" : "Good morning!",
+    "outro" : "That's all for today - great work everyone!"
+  },
+
   "exercises": [
     {
       "id": 0,

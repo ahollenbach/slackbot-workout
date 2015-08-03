@@ -27,9 +27,9 @@ def main():
             now = datetime.now().time()
             if now > bot.active_hours[0] and now < bot.active_hours[1]:
                 if not bot.active:
-                    slack_client.send_message("Hey all! Better late than never! ;)", bot.debug)
+                    slack_client.send_message(bot.intro, bot.debug)
                     bot.active = True
-                    
+
                 exercise = bot.select_exercise_and_start_time()
                 #sleep_time = bot.select_time()
 
@@ -42,7 +42,7 @@ def main():
                 #     sleep(now-bot.active_hours[0])
             elif now > bot.active_hours[1] and bot.active:
                 bot.active = False
-                slack_client.send_message("That's all for today - great work everyone!", bot.debug)
+                slack_client.send_message(bot.outro, bot.debug)
 
             # Pseudo-save state after each (todo save the whole thing)
             bot.print_breakdown()

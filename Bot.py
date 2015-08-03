@@ -69,6 +69,9 @@ class Bot:
             self.active_hours[0] = parser.parse(self.active_hours[0]).time()
             self.active_hours[1] = parser.parse(self.active_hours[1]).time()
 
+            self.intro = settings["phrases"]["intro"]
+            self.outro = settings["phrases"]["outro"]
+
             self.exercises = settings["exercises"]
             self.debug = settings["debug"]
 
