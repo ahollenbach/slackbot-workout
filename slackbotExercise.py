@@ -26,6 +26,12 @@ def main():
             # Get an exercise to do
             now = datetime.now().time()
             if now > bot.active_hours[0] and now < bot.active_hours[1]:
+                # for inactive_timespan in bot.inactive_hours:
+                #     if inactive_timespan[0] < now and now < inactive_timespan[1]:
+                #         print "sleeping for " + str((inactive_timespan[1]-now)/1000)
+                #         sleep((inactive_timespan[1]-now)/1000) # TODO can't subtract
+                #         break
+
                 if not bot.active:
                     slack_client.send_message(bot.intro, bot.debug)
                     bot.active = True
