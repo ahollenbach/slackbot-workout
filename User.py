@@ -26,6 +26,11 @@ class User:
         # A record of past runs
         self.past_workouts = {}
 
+        # Tracks today's workouts
+        # TODO remove (duplicates)
+        self.exercise_board = []
+        self.past_exercise_board = []
+
         print "New user: " + self.real_name + " (" + self.username + ")"
 
 
@@ -35,9 +40,19 @@ class User:
         except:
             self.past_workouts = {}
 
+
+        try:
+            self.past_exercise_board
+            self.exercise_board
+        except AttributeError:
+            self.past_exercise_board = []
+            self.exercise_board = []
+
+        self.past_exercise_board += self.exercise_board
         self.past_workouts[run_name] = self.exercises
         self.exercises = {}
         self.exercise_counts = {}
+        self.exercise_board = []
 
 
     def fetch_names(self):
@@ -69,13 +84,20 @@ class User:
             print "Error fetching online status for " + self.get_user_handle()
             return False
 
-    def add_exercise(self, exercise, reps):
+    def add_exercise(self, exercise, reps, all_channel=False):
         # Add to total counts
         self.exercises[exercise["id"]] = self.exercises.get(exercise["id"], 0) + reps
         self.exercise_counts[exercise["id"]] = self.exercise_counts.get(exercise["id"], 0) + 1
 
         # Add to exercise history record
         self.exercise_history.append([datetime.datetime.now().isoformat(),exercise["id"],exercise["name"],reps,exercise["units"]])
+
+        # time, name, reps, units, completed
+        try:
+            self.exercise_board
+        except NameError:
+            self.exercise_board = []
+        self.exercise_board.append([datetime.datetime.now().strftime("%I:%M%p"), exercise["name"], reps, exercise["units"], False])
 
     def has_done_exercise(self, exercise):
         return exercise["id"] in self.exercise_counts

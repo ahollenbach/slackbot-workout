@@ -8,7 +8,7 @@ import pickle
 import os
 import os.path
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser
 
 from User import User
@@ -198,14 +198,11 @@ class Bot:
         # Announce the exercise to the thread
         self.slack_client.send_message(lottery_announcement, self.debug)
 
-        # Sleep the script until time is up
-        if not self.debug:
-            time.sleep(next_time_interval)
-        else:
-            # If debugging, once every 5 seconds
-            time.sleep(5)
+        if self.debug:
+            # If debugging, once every 20 seconds
+            next_time_interval = 20
 
-        return exercise
+        return exercise, next_time_interval
 
 
     '''
