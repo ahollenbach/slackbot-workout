@@ -3,7 +3,7 @@
   "channelName": "general",
   "channelId": "channelIdHere",
 
-  "debug": false,
+  "debug": true,
 
   "storage": {
     "userDir": "./users",
@@ -80,7 +80,7 @@
 
   "timeRestrictions": {
     "activeHours": [
-      ["10:30", "6:30"]
+      ["10:30", "18:30"]
     ],
     "inactiveHours": [
       ["12:00", "12:30"]
