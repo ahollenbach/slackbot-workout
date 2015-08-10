@@ -328,5 +328,5 @@ class Bot:
         s += "```"
 
         filename = self.breakdown_filename + "_DEBUG" if self.debug else self.breakdown_filename
-        with open(os.path.join(self.user_dir, filename), 'w') as f:
+        with open(os.path.join(self.log_dir, filename), 'w') as f:
             f.write(s)
