@@ -41,7 +41,6 @@ class MessageTracker:
     def _handle_message(self, data):
         # Limit for channel
         channel = self.slack_client.channel_id
-        channel = "G08GCMVNC"
         if "channel" not in data or data["channel"] != channel:
             print "Ignoring non-channel message"
             return
@@ -93,7 +92,6 @@ class MessageTracker:
     def _handle_reaction_added(self, data):
         # Limit for channel
         channel = self.slack_client.channel_id
-        channel = "G08GCMVNC"
         if "channel" not in data["item"] or data["item"]["channel"] != channel:
             print "Ignoring non-channel message"
             return
