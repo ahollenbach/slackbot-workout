@@ -14,9 +14,9 @@ class MessageTracker:
 
     def fetch_updates(self):
         for update in self.rtm.rtm_read():
-            self.handle_update(update)
+            self._handle_update(update)
 
-    def handle_update(self, data):
+    def _handle_update(self, data):
         if self.bot.debug:
             print "\n============ " + data["type"] + " ============"
             pprint(json.dumps(data))
@@ -25,6 +25,10 @@ class MessageTracker:
         # Filter out only update types we want to look at
         accepted_update_types = ["message", "reaction_added"]
         if data["type"] not in accepted_update_types:
+            if data["type"] == "presence_change" or data["type"] == "user_typing":
+                # ignore and don't print...it gets to be too much
+                return
+
             print "Ignoring update of type " + data["type"]
             return
 
@@ -49,14 +53,21 @@ class MessageTracker:
             print "Ignoring bot message"
             return
 
-        if data["user"] not in self.bot.user_cache:
+        if "user" in data and data["user"] not in self.bot.user_cache:
             print "Ignoring message: user not found in cache"
+            return
+        else:
+            print "data['user'] not found!"
+            print data
             return
 
         if "@USLACKBOT" not in data["text"]:
             print "Saving message for later"
             self.message_store[data["ts"]] = { "user": data["user"], "text": data["text"] }
             return
+        # elif "@USLACKBOT" in data["text"] and "help" in data["text"]:
+        #     help_message = ""
+        #     self.slack_client.send_message(help_message, bot.debug)
 
         user = self.bot.user_cache[data["user"]]
         incoming_message = data["text"]
