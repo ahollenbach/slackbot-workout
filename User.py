@@ -80,7 +80,7 @@ class User:
             status = json.loads(response.text, encoding='utf-8')["presence"]
 
             return status == "active"
-        except (requests.exceptions.ConnectionError,NameError,KeyError):
+        except (requests.exceptions.ConnectionError,NameError,KeyError,ValueError):
             print "Error fetching online status for " + self.get_user_handle()
             return False
 
